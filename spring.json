@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Turnip",
+        "stages": [
+            { "name": "Seed", "days": 2, "sunRange": [3, 19], "waterRange": [2, 19] },
+            { "name": "Sprout 1", "days": 2, "sunRange": [3, 19], "waterRange": [2, 19] }
+        ],
+        "matureConditions": { "sun": 39, "water": 19, "lifespan": 10 },
+        "unlock": "At the beginning of the game",
+        "chenPrice": 120,
+        "sellPrice": { "average": 129, "sRankMax": 183, "chen": 36 }
+    },
+    {
+        "name": "Potato",
+        "stages": [
+            { "name": "Seed", "days": 3, "sunRange": [4, 19], "waterRange": [3, 19] },
+            { "name": "Sprout 1", "days": 4, "sunRange": [6, 27], "waterRange": [4, 27] }
+        ],
+        "matureConditions": { "sun": 19, "water": 9, "lifespan": 10 },
+        "unlock": "At the beginning of the game",
+        "chenPrice": 150,
+        "sellPrice": { "average": 172, "sRankMax": 244, "chen": 48 }
+    },
+    {
+        "name": "Cucumber",
+        "stages": [
+            { "name": "Seed", "days": 4, "sunRange": [7, 29], "waterRange": [3, 11] },
+            { "name": "Sprout 1", "days": 3, "sunRange": [5, 23], "waterRange": [2, 7] },
+            { "name": "Sprout 2", "days": 2, "sunRange": [4, 17], "waterRange": [2, 9] }
+        ],
+        "matureConditions": { "sun": 19, "water": 7, "lifespan": 10 },
+        "regrowsTo": "Sprout 2",
+        "unlock": "Earn 10,000 or more Crop Degree points",
+        "chenPrice": 200,
+        "sellPrice": { "average": 129, "sRankMax": 183, "chen": 36 }
+    },
+    {
+        "name": "Strawberry",
+        "stages": [
+            { "name": "Seed", "days": 4, "sunRange": [4, 9], "waterRange": [4, 11] },
+            { "name": "Sprout 1", "days": 3, "sunRange": [3, 9], "waterRange": [3, 11] },
+            { "name": "Sprout 2", "days": 2, "sunRange": [3, 5], "waterRange": [2, 7] }
+        ],
+        "matureConditions": { "sun": 9, "water": 9, "lifespan": 10 },
+        "regrowsTo": "Sprout 2",
+        "unlock": "Earn 20,000 or more Crop Degree points",
+        "chenPrice": 150,
+        "sellPrice": { "average": 64, "sRankMax": 91, "chen": 18 }
+    },
+    {
+        "name": "Cabbage",
+        "stages": [
+            { "name": "Seed", "days": 4, "sunRange": [9, 24], "waterRange": [3, 11] },
+            { "name": "Sprout 1", "days": 5, "sunRange": [12, 29], "waterRange": [4, 11] },
+            { "name": "Sprout 2", "days": 5, "sunRange": [12, 26], "waterRange": [5, 15] }
+        ],
+        "matureConditions": { "sun": 9, "water": 9, "lifespan": 10 },
+        "unlock": "Ship 100 or more Wheat AND earn 40,000 or more Crop Degree points",
+        "chenPrice": 500,
+        "sellPrice": { "average": 756, "sRankMax": 1071, "chen": 210 }
+    }
+]

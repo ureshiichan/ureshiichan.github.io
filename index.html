@@ -3,174 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Cultivos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        h1 {
-            text-align: center;
-            color: #2C3E50;
-        }
-        .section {
-            margin-bottom: 40px;
-        }
-        .button {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .button:hover {
-            background-color: #2980b9;
-        }
-        select, input {
-            padding: 10px;
-            margin: 5px 0;
-        }
-
-        /* Estilos para la cuadrícula */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(15, 25px); /* 15 columnas con 25px de ancho */
-            grid-gap: 3px; /* Reducir el espacio entre las celdas */
-            justify-content: center; /* Centra la cuadrícula */
-            max-width: 100%; /* Asegura que use todo el ancho disponible */
-        }
-
-        .grid div {
-            width: 25px; /* Reducir el ancho de las celdas */
-            height: 20px; /* Reducir la altura de las celdas para hacerlas más chaparritas */
-            border: 1px solid #bdc3c7;
-            text-align: center;
-            line-height: 20px; /* Ajustar para centrar el texto verticalmente */
-            cursor: pointer;
-            background-color: #ecf0f1;
-        }
-
-        /* Estilo para las tarjetas de cultivos */
-        .card {
-            border: 1px solid #ecf0f1;
-            padding: 20px;
-            margin: 10px;
-            background-color: #f7f7f7;
-            border-radius: 5px;
-        }
-    </style>
+    <title>Control de Cultivos - Harvest Moon</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h1>Control de Cultivos - Harvest Moon</h1>
 
-        <!-- Sección para selección de clima y avance de días -->
+        <!-- Control de Clima y Día -->
         <div class="section">
             <h2>Clima de Hoy</h2>
-            <select id="clima-hoy">
-                <option value="Sunny">Soleado (+3 puntos sol)</option>
-                <option value="Clear">Despejado (+2 puntos sol)</option>
-                <option value="Cloudy">Nublado (+1 punto sol)</option>
-                <option value="Rainy">Lluvia (+2 puntos agua)</option>
+            <select id="selectClima">
+                <!-- Opciones de clima cargadas desde JSON -->
             </select>
-            <button class="button" onclick="avanzarDia()">Avanzar Día</button>
-            <p>Hoy es <strong id="dia-actual">Día 1 de Primavera</strong></p>
+            <button id="btnAvanzarDia" class="button">Avanzar Día</button>
+            <p>Hoy es Día <span id="diaActual">1</span> de Primavera</p>
         </div>
+
+        <!-- Botón para agregar/guardar área -->
+        <button id="toggleAreaBtn" class="button">Agregar Área</button>
 
         <!-- Cuadrícula de cultivos -->
         <div class="section">
             <h2>Cuadrícula de Cultivos (42x15)</h2>
             <div class="grid" id="grid">
-                <!-- Generar celdas dinámicamente -->
+                <!-- Las celdas se generarán dinámicamente aquí -->
             </div>
         </div>
 
-        <!-- Sección para las tarjetas de cultivos -->
-        <div class="section">
+        <!-- Modal para ingresar detalles del área -->
+        <div class="modal" id="areaModal">
+            <h3>Detalles del Área</h3>
+            <label>Nombre del Área:</label>
+            <input type="text" id="nombreArea" placeholder="Ej. Turnip A"><br><br>
+
+            <label>Tipo de Cultivo:</label>
+            <select id="tipoCultivo">
+                <!-- Opciones cargadas desde JSON -->
+            </select><br><br>
+
+            <label>Fecha de Plantación:</label>
+            <input type="text" id="fechaPlantacion" disabled><br><br>
+
+            <label>Estado Inicial:</label><br>
+            <div id="estadoCultivo">
+                <!-- Radio buttons generados según el cultivo -->
+            </div><br>
+
+            <button id="guardarInfoBtn" class="button">Guardar</button>
+        </div>
+
+        <!-- Tarjetas de Cultivos -->
+        <div class="section" id="tarjetasCultivos">
             <h2>Tarjetas de Cultivos</h2>
-            <div id="tarjetas-cultivos"></div>
         </div>
     </div>
 
-    <script>
-        let diaActual = 1;
-        let celdasSeleccionadas = []; // Para guardar las celdas seleccionadas
-
-        function avanzarDia() {
-            diaActual++;
-            document.getElementById('dia-actual').textContent = `Día ${diaActual} de Primavera`;
-            alert('Día avanzado. Actualizar puntos de sol y agua según el clima seleccionado.');
-        }
-
-        // Generar la cuadrícula de 42x15
-        function generarCuadricula() {
-            const grid = document.getElementById('grid');
-            for (let i = 0; i < 42 * 15; i++) { // 42 filas x 15 columnas
-                const celda = document.createElement('div');
-                celda.textContent = ''; // Inicialmente vacía
-
-                // Evento para seleccionar la celda (selección múltiple)
-                celda.addEventListener('click', function() {
-                    // Cambiar color para mostrar que está seleccionada
-                    if (celdasSeleccionadas.includes(celda)) {
-                        celda.style.backgroundColor = '#ecf0f1'; // Quitar selección
-                        celdasSeleccionadas = celdasSeleccionadas.filter(c => c !== celda);
-                    } else {
-                        celda.style.backgroundColor = '#2ecc71'; // Añadir selección
-                        celdasSeleccionadas.push(celda);
-                    }
-                });
-
-                grid.appendChild(celda);
-            }
-        }
-
-        // Función para agregar cultivo a las celdas seleccionadas
-        function agregarCultivo(nombreCultivo) {
-            if (celdasSeleccionadas.length === 0) {
-                alert("Selecciona al menos una celda para agregar el cultivo.");
-                return;
-            }
-
-            // Asignar cultivo a las celdas seleccionadas
-            celdasSeleccionadas.forEach(celda => {
-                celda.textContent = nombreCultivo;
-            });
-
-            // Crear una tarjeta de cultivo
-            crearTarjetaCultivo(nombreCultivo);
-
-            // Limpiar la selección
-            celdasSeleccionadas = [];
-        }
-
-        // Función para crear una tarjeta de cultivo
-        function crearTarjetaCultivo(nombreCultivo) {
-            const tarjetas = document.getElementById('tarjetas-cultivos');
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <h3>${nombreCultivo}</h3>
-                <p>Plantado el: Día ${diaActual} de Primavera</p>
-                <p>Puntos de Sol: 0/3</p>
-                <p>Puntos de Agua: 0/2</p>
-                <button class="button">Regar 1 vez</button>
-            `;
-            tarjetas.appendChild(card);
-        }
-
-        // Llamar a la función al cargar la página
-        window.onload = generarCuadricula;
-
-        // Ejemplo de agregar un cultivo al hacer clic en un botón (esto es temporal)
-        setTimeout(() => {
-            agregarCultivo("Turnip");
-        }, 5000); // Esto es solo para probar la función de agregar un cultivo automáticamente después de 5 segundos
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,10 @@
+[
+    { "name": "Sunny", "waterPoints": 0, "sunPoints": 3, "season": "All year" },
+    { "name": "Clear", "waterPoints": 0, "sunPoints": 2, "season": "All year" },
+    { "name": "Cloudy", "waterPoints": 0, "sunPoints": 1, "season": "All year" },
+    { "name": "Drizzle", "waterPoints": 1, "sunPoints": 0, "season": "Spring, Summer, Fall" },
+    { "name": "Rainy", "waterPoints": 2, "sunPoints": 0, "season": "Spring, Summer, Fall" },
+    { "name": "Snowy", "waterPoints": 2, "sunPoints": 0, "season": "Winter" },
+    { "name": "Hurricane", "waterPoints": 3, "sunPoints": 0, "season": "Summer" },
+    { "name": "Blizzard", "waterPoints": 3, "sunPoints": 0, "season": "Winter" }
+]

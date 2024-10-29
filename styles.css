@@ -1,0 +1,71 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+h1 {
+    text-align: center;
+    color: #2C3E50;
+}
+.section {
+    margin-bottom: 40px;
+}
+.button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.button:hover {
+    background-color: #2980b9;
+}
+select, input {
+    padding: 10px;
+    margin: 5px 0;
+}
+
+/* Estilos para la cuadrícula */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(42, 25px); /* 42 columnas de 25px */
+    grid-gap: 3px; /* Espacio entre celdas */
+    justify-content: center; /* Centra la cuadrícula */
+    max-width: 100%; /* Ancho completo */
+}
+
+.grid div {
+    width: 25px; /* Ancho de cada celda */
+    height: 25px; /* Altura de cada celda para hacerlas cuadradas */
+    border: 1px solid #bdc3c7;
+    text-align: center;
+    line-height: 25px; /* Centrado vertical */
+    cursor: pointer;
+    background-color: #ecf0f1;
+}
+
+/* Estilos para las celdas seleccionadas */
+.grid div.selected {
+    background-color: #4caf50; /* O el color que prefieras */
+}
+
+/* Estilos del modal */
+.modal {
+    display: none; /* Modal oculto por defecto */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 300px;
+}
+.modal.active {
+    display: block; /* Muestra el modal cuando está activo */
+}
