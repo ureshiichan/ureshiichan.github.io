@@ -1,71 +1,177 @@
+/* Estilos Generales */
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background-color: #f0f8ff;
 }
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 20px;
 }
-h1 {
+
+header {
     text-align: center;
-    color: #2C3E50;
-}
-.section {
-    margin-bottom: 40px;
-}
-.button {
-    background-color: #3498db;
+    background-color: #8FBC8F;
     color: white;
-    padding: 10px 15px;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    border-bottom: 5px solid #556B2F;
+}
+
+h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+.current-day {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.section h2 {
+    color: #2E8B57;
+    border-bottom: 2px solid #2E8B57;
+    padding-bottom: 5px;
+}
+
+.button {
+    background-color: #FFA500;
+    color: white;
+    padding: 10px 20px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 16px;
 }
+
 .button:hover {
-    background-color: #2980b9;
+    background-color: #FF8C00;
 }
-select, input {
+
+select, input[type="text"] {
     padding: 10px;
     margin: 5px 0;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="radio"] {
+    margin-right: 5px;
 }
 
 /* Estilos para la cuadrícula */
 .grid {
     display: grid;
-    grid-template-columns: repeat(42, 25px); /* 42 columnas de 25px */
-    grid-gap: 3px; /* Espacio entre celdas */
-    justify-content: center; /* Centra la cuadrícula */
-    max-width: 100%; /* Ancho completo */
+    grid-template-columns: repeat(42, 20px);
+    grid-gap: 2px;
+    justify-content: center;
+    max-width: 100%;
+    background-color: #FAFAD2;
+    padding: 10px;
+    border: 2px solid #2E8B57;
+    border-radius: 10px;
 }
 
-.grid div {
-    width: 25px; /* Ancho de cada celda */
-    height: 25px; /* Altura de cada celda para hacerlas cuadradas */
-    border: 1px solid #bdc3c7;
-    text-align: center;
-    line-height: 25px; /* Centrado vertical */
+.grid .celda {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #8B4513;
     cursor: pointer;
-    background-color: #ecf0f1;
+    background-color: #DEB887;
 }
 
-/* Estilos para las celdas seleccionadas */
-.grid div.selected {
-    background-color: #4caf50; /* O el color que prefieras */
+.grid .celda:hover {
+    background-color: #F4A460;
+}
+
+.grid .celda.selected {
+    background-color: rgba(0, 128, 0, 0.6);
+}
+
+.grid .celda.bloqueado {
+    /* Mantener el color asignado al área */
 }
 
 /* Estilos del modal */
 .modal {
-    display: none; /* Modal oculto por defecto */
+    display: none;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    width: 300px;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
 }
-.modal.active {
-    display: block; /* Muestra el modal cuando está activo */
+
+.modal-content {
+    background-color: #fffaf0;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    position: relative;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aa0000;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #ff0000;
+}
+
+/* Estilos para las tarjetas de cultivos */
+.tarjetas-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.tarjeta {
+    background-color: #fffaf0;
+    border: 2px solid #DEB887;
+    padding: 15px;
+    border-radius: 10px;
+    width: calc(33.333% - 20px);
+    box-sizing: border-box;
+}
+
+.tarjeta h4 {
+    margin-top: 0;
+    color: #8B4513;
+}
+
+.tarjeta p {
+    margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    .tarjeta {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .tarjeta {
+        width: 100%;
+    }
 }

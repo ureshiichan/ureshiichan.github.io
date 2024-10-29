@@ -2,30 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de Cultivos - Harvest Moon</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Fuente de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Control de Cultivos - Harvest Moon</h1>
+        <header>
+            <h1>🌱 Control de Cultivos - Harvest Moon 🌻</h1>
+            <!-- Mostrar el día actual -->
+            <div class="current-day">Día Actual: <span id="diaActual">1</span></div>
+        </header>
 
-        <!-- Control de Clima y Día -->
-        <div class="section">
-            <h2>Clima de Hoy</h2>
-            <select id="selectClima">
-                <!-- Opciones de clima cargadas desde JSON -->
-            </select>
-            <button id="btnAvanzarDia" class="button">Avanzar Día</button>
-            <p>Hoy es Día <span id="diaActual">1</span> de Primavera</p>
-        </div>
-
-        <!-- Botón para agregar/guardar área -->
+        <!-- Botón para agregar un área y activar la selección -->
         <button id="toggleAreaBtn" class="button">Agregar Área</button>
 
         <!-- Cuadrícula de cultivos -->
         <div class="section">
-            <h2>Cuadrícula de Cultivos (42x15)</h2>
+            <h2>Mapa de Cultivos</h2>
             <div class="grid" id="grid">
                 <!-- Las celdas se generarán dinámicamente aquí -->
             </div>
@@ -33,29 +28,35 @@
 
         <!-- Modal para ingresar detalles del área -->
         <div class="modal" id="areaModal">
-            <h3>Detalles del Área</h3>
-            <label>Nombre del Área:</label>
-            <input type="text" id="nombreArea" placeholder="Ej. Turnip A"><br><br>
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h3>Detalles del Área</h3>
+                <label>Nombre del Área:</label>
+                <input type="text" id="nombreArea" placeholder="Ej. Campo Norte"><br><br>
 
-            <label>Tipo de Cultivo:</label>
-            <select id="tipoCultivo">
-                <!-- Opciones cargadas desde JSON -->
-            </select><br><br>
+                <label>Tipo de Cultivo:</label>
+                <select id="tipoCultivo">
+                    <!-- Opciones cargadas desde JSON -->
+                </select><br><br>
 
-            <label>Fecha de Plantación:</label>
-            <input type="text" id="fechaPlantacion" disabled><br><br>
+                <label>Fecha de Plantación:</label>
+                <input type="text" id="fechaPlantacion" disabled><br><br>
 
-            <label>Estado Inicial:</label><br>
-            <div id="estadoCultivo">
-                <!-- Radio buttons generados según el cultivo -->
-            </div><br>
+                <label>Estado Inicial:</label><br>
+                <div id="estadoCultivo">
+                    <!-- Radio buttons generados según el cultivo -->
+                </div><br>
 
-            <button id="guardarInfoBtn" class="button">Guardar</button>
+                <button id="guardarInfoBtn" class="button">Guardar</button>
+            </div>
         </div>
 
-        <!-- Tarjetas de Cultivos -->
-        <div class="section" id="tarjetasCultivos">
-            <h2>Tarjetas de Cultivos</h2>
+        <!-- Sección para mostrar las tarjetas de cultivos -->
+        <div class="section">
+            <h2>Áreas de Cultivo</h2>
+            <div id="tarjetasCultivos" class="tarjetas-container">
+                <!-- Las tarjetas se agregarán dinámicamente aquí -->
+            </div>
         </div>
     </div>
 
