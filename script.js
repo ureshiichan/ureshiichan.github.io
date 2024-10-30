@@ -4,7 +4,7 @@ let celdasSeleccionadas = [];
 let celdaInicial = null;
 let cultivosPlantados = [];
 let diaActual = 1;
-let cultivosDisponibles = [];
+let cultivosDisponibles = []; // Mover la declaración aquí para que sea accesible en todas las funciones
 
 // Mostrar el día actual en la interfaz
 function mostrarDiaActual() {
@@ -203,7 +203,7 @@ document.getElementById('guardarInfoBtn').addEventListener('click', () => {
     const clima = document.getElementById('climaSelect').value;
     const puntosClima = obtenerPuntosPorClima(clima);
 
-    const nuevoCultivo = {
+    agregarTarjetaCultivo({
         nombre: nombreArea,
         cultivo: tipoCultivo,
         estado: estadoInicial,
@@ -215,19 +215,10 @@ document.getElementById('guardarInfoBtn').addEventListener('click', () => {
         puntosAguaAcumulados: 0,
         maxPuntosSol: obtenerPuntosMaximos(tipoCultivo, estadoInicial, 'sol'),
         maxPuntosAgua: obtenerPuntosMaximos(tipoCultivo, estadoInicial, 'agua'),
-        minPuntosSol: obtenerPuntosMinimos(tipoCultivo, estadoInicial, 'sol'),
-        minPuntosAgua: obtenerPuntosMinimos(tipoCultivo, estadoInicial, 'agua'),
-        celdas: celdasSeleccionadas.map(celda => celda.dataset.index),
-        regado: 0,
-        diasEnEtapa: 0,
+        regado: 0, // Valor de regado inicial
+        diasEnEtapa: 0, // Días transcurridos en la etapa actual
         diasRequeridos: obtenerDiasRequeridos(tipoCultivo, estadoInicial)
-    };
-
-    // Agregar la tarjeta
-    agregarTarjetaCultivo(nuevoCultivo);
-
-    // Agregar el cultivo al arreglo
-    cultivosPlantados.push(nuevoCultivo);
+    });
 
     document.getElementById('areaModal').style.display = 'none';
     limpiarSeleccion();
@@ -258,26 +249,6 @@ function obtenerPuntosMaximos(nombreCultivo, estado, tipo) {
     return 0;
 }
 
-// Función para obtener los puntos mínimos de sol y agua para avanzar de etapa
-function obtenerPuntosMinimos(nombreCultivo, estado, tipo) {
-    const cultivo = cultivosDisponibles.find(c => c.name === nombreCultivo);
-    if (!cultivo) {
-        console.error(`Cultivo ${nombreCultivo} no encontrado en los cultivos disponibles.`);
-        return 0;
-    }
-    const stage = cultivo.stages.find(s => s.name === estado);
-    if (!stage) {
-        console.error(`Estado ${estado} no encontrado en el cultivo ${nombreCultivo}.`);
-        return 0;
-    }
-    if (tipo === 'sol') {
-        return stage.sunRange[0];
-    } else if (tipo === 'agua') {
-        return stage.waterRange[0];
-    }
-    return 0;
-}
-
 // Función para obtener los días requeridos en la etapa actual
 function obtenerDiasRequeridos(nombreCultivo, estado) {
     const cultivo = cultivosDisponibles.find(c => c.name === nombreCultivo);
@@ -293,7 +264,7 @@ function obtenerDiasRequeridos(nombreCultivo, estado) {
     return stage.days;
 }
 
-// Modificar la función para que solo cree la tarjeta sin agregar al arreglo
+// Agregar tarjeta de cultivo en la sección correspondiente
 function agregarTarjetaCultivo(info) {
     const tarjeta = document.createElement('div');
     tarjeta.classList.add('tarjeta');
@@ -354,12 +325,10 @@ function agregarTarjetaCultivo(info) {
         <p><strong>Días en Etapa:</strong> <span class="dias">${info.diasEnEtapa}</span> / ${info.diasRequeridos}</p>
         <p><strong>Fecha de Plantación:</strong> ${info.fecha}</p>
         <p><strong>Puntos de Sol:</strong> <span class="sol">${info.puntosSolAcumulados}</span> / ${info.maxPuntosSol}</p>
-        <p><strong>Puntos necesarios para avanzar (Sol):</strong> ${info.minPuntosSol}</p>
     `;
     tarjeta.appendChild(progresoSol);
     tarjeta.innerHTML += `
         <p><strong>Puntos de Agua:</strong> <span class="agua">${info.puntosAguaAcumulados}</span> / ${info.maxPuntosAgua}</p>
-        <p><strong>Puntos necesarios para avanzar (Agua):</strong> ${info.minPuntosAgua}</p>
     `;
     tarjeta.appendChild(progresoAgua);
     tarjeta.appendChild(wateringControls);
@@ -367,6 +336,25 @@ function agregarTarjetaCultivo(info) {
     tarjeta.appendChild(imgCultivo);
 
     document.getElementById('tarjetasCultivos').appendChild(tarjeta);
+
+    // Guardamos la información del cultivo en una estructura global
+    cultivosPlantados.push({
+        nombre: info.nombre,
+        cultivo: info.cultivo,
+        estado: info.estado,
+        fecha: info.fecha,
+        color: info.color,
+        puntosSolDia: info.puntosSolDia,
+        puntosAguaDia: info.puntosAguaDia,
+        puntosSolAcumulados: info.puntosSolAcumulados,
+        puntosAguaAcumulados: info.puntosAguaAcumulados,
+        maxPuntosSol: info.maxPuntosSol,
+        maxPuntosAgua: info.maxPuntosAgua,
+        celdas: celdasSeleccionadas.map(celda => celda.dataset.index),
+        regado: info.regado,
+        diasEnEtapa: info.diasEnEtapa,
+        diasRequeridos: info.diasRequeridos
+    });
 
     // Actualizar los puntos iniciales en la interfaz
     actualizarPuntosCultivo(info.nombre);
@@ -383,7 +371,7 @@ function actualizarPuntosCultivo(nombreCultivo) {
         cultivo.puntosSolDia = puntosClima.sol;
         cultivo.puntosAguaDia = puntosClima.agua + cultivo.regado;
 
-        // Calculamos los puntos acumulados hasta el día actual
+        // Calculamos los puntos acumulados hasta el día actual (sin sumar aún los del día actual)
         const puntosSolAcumulados = cultivo.puntosSolAcumulados + cultivo.puntosSolDia;
         const puntosAguaAcumulados = cultivo.puntosAguaAcumulados + cultivo.puntosAguaDia;
 
@@ -398,7 +386,6 @@ function actualizarPuntosCultivo(nombreCultivo) {
             const progresoAguaInner = tarjeta.querySelector('.progress-bar-inner.agua');
             progresoAguaInner.style.width = `${(puntosAguaAcumulados / cultivo.maxPuntosAgua) * 100}%`;
 
-            // Actualizar tip
             const tipRiego = tarjeta.querySelector('.tip');
             tipRiego.textContent = generarTip(cultivo, puntosSolAcumulados, puntosAguaAcumulados);
         }
@@ -468,17 +455,7 @@ document.getElementById('avanzarDiaBtn').addEventListener('click', () => {
             // Actualizar tip
             const tipRiego = tarjeta.querySelector('.tip');
             tipRiego.textContent = generarTip(cultivo, cultivo.puntosSolAcumulados, cultivo.puntosAguaAcumulados);
-
-            // Actualizar puntos mínimos necesarios para avanzar
-            const puntosRestantesSol = Math.max(0, cultivo.minPuntosSol - cultivo.puntosSolAcumulados);
-            const puntosRestantesAgua = Math.max(0, cultivo.minPuntosAgua - cultivo.puntosAguaAcumulados);
-
-            tarjeta.querySelector('.puntosRestantesSol').textContent = puntosRestantesSol;
-            tarjeta.querySelector('.puntosRestantesAgua').textContent = puntosRestantesAgua;
         }
-
-        // Después de actualizar, también actualizar los puntos del día actual para reflejar el clima y regado del nuevo día
-        actualizarPuntosCultivo(cultivo.nombre);
     });
 
     guardarCultivosEnLocalStorage();
@@ -490,8 +467,8 @@ function generarTip(cultivo, puntosSolAcumulados, puntosAguaAcumulados) {
         return "El cultivo se ha marchitado. Considérelo perdido.";
     }
 
-    const necesitaAgua = puntosAguaAcumulados < cultivo.minPuntosAgua;
-    const necesitaSol = puntosSolAcumulados < cultivo.minPuntosSol;
+    const necesitaAgua = puntosAguaAcumulados < cultivo.maxPuntosAgua;
+    const necesitaSol = puntosSolAcumulados < cultivo.maxPuntosSol;
     const diasRestantes = cultivo.diasRequeridos - cultivo.diasEnEtapa;
 
     let tip = `Faltan ${diasRestantes} día(s) para avanzar de etapa. `;
@@ -538,8 +515,6 @@ function verificarEstadoCultivo(cultivo) {
             cultivo.puntosAguaDia = 0;
             cultivo.maxPuntosSol = cultivoData.stages[indexActual + 1].sunRange[1];
             cultivo.maxPuntosAgua = cultivoData.stages[indexActual + 1].waterRange[1];
-            cultivo.minPuntosSol = cultivoData.stages[indexActual + 1].sunRange[0];
-            cultivo.minPuntosAgua = cultivoData.stages[indexActual + 1].waterRange[0];
             cultivo.diasEnEtapa = 0;
             cultivo.diasRequeridos = cultivoData.stages[indexActual + 1].days;
 
@@ -604,7 +579,7 @@ function cargarCultivosDeLocalStorage() {
                 }
             });
 
-            // Agregar la tarjeta sin duplicar el cultivo en el arreglo
+            // Agregar la tarjeta
             agregarTarjetaCultivo(cultivo);
         });
     }
@@ -627,9 +602,4 @@ window.onload = async () => {
     const climaIcono = document.getElementById('climaIcono');
     climaIcono.src = `img/${clima.toLowerCase()}.gif`;
     climaIcono.alt = clima;
-
-    // Actualizar puntos de todos los cultivos al cargar la página
-    cultivosPlantados.forEach(cultivo => {
-        actualizarPuntosCultivo(cultivo.nombre);
-    });
 };

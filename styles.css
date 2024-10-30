@@ -255,3 +255,42 @@ input[type="radio"] {
         width: 100%;
     }
 }
+
+/* ... (estilos existentes) ... */
+
+/* Animación para celdas seleccionadas */
+.grid .celda.selected {
+    background-color: rgba(0, 128, 0, 0.6);
+    transition: background-color 0.3s;
+}
+
+/* Animación para tarjetas */
+.tarjeta {
+    transition: transform 0.2s;
+}
+
+.tarjeta:hover {
+    transform: scale(1.02);
+}
+
+/* Tooltip para las barras de progreso */
+.progress-bar-inner {
+    position: relative;
+}
+
+.progress-bar-inner::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -25px;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 3px 5px;
+    font-size: 12px;
+    border-radius: 3px;
+    display: none;
+}
+
+.progress-bar-inner:hover::after {
+    display: block;
+}
