@@ -15,6 +15,24 @@
             <div class="current-day">Día Actual: <span id="diaActual">1</span></div>
         </header>
 
+        <!-- Botones para avanzar el día y seleccionar el clima -->
+        <div class="controls">
+            <label for="climaSelect">Clima:</label>
+            <select id="climaSelect">
+                <option value="Sunny">Soleado</option>
+                <option value="Clear">Despejado</option>
+                <option value="Cloudy">Nublado</option>
+                <option value="Drizzle">Llovizna</option>
+                <option value="Rainy">Lluvioso</option>
+                <option value="Snowy">Nevado</option>
+                <option value="Hurricane">Huracán</option>
+                <option value="Blizzard">Tormenta de Nieve</option>
+            </select>
+            <!-- Icono del clima actual -->
+            <img id="climaIcono" src="img/sunny.gif" alt="Clima Actual">
+            <button id="avanzarDiaBtn" class="button">Avanzar Día</button>
+        </div>
+
         <!-- Botón para agregar un área y activar la selección -->
         <button id="toggleAreaBtn" class="button">Agregar Área</button>
 
