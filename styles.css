@@ -244,6 +244,11 @@ input[type="radio"] {
     width: auto;
 }
 
+/* Botón para cosechar */
+.cosechar-btn {
+    margin-top: 10px;
+}
+
 @media (max-width: 768px) {
     .tarjeta {
         width: calc(50% - 20px);
