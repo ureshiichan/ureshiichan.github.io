@@ -335,6 +335,15 @@ function agregarTarjetaCultivo(info) {
     tarjeta.appendChild(tipRiego);
     tarjeta.appendChild(imgCultivo);
 
+    // Botón para cosechar
+    const cosecharBtn = document.createElement('button');
+    cosecharBtn.textContent = 'Cosechar';
+    cosecharBtn.classList.add('button', 'cosechar-btn');
+    cosecharBtn.addEventListener('click', () => {
+        cosecharCultivo(info.nombre);
+    });
+    tarjeta.appendChild(cosecharBtn);
+
     document.getElementById('tarjetasCultivos').appendChild(tarjeta);
 
     // Guardamos la información del cultivo en una estructura global
@@ -532,6 +541,59 @@ function verificarEstadoCultivo(cultivo) {
         cultivo.estado = "Marchito";
         // Puedes agregar lógica para cambiar el estilo de las celdas y tarjetas
     }
+}
+
+// Función para cosechar un cultivo y aplicar regrowth si corresponde
+function cosecharCultivo(nombre) {
+    const cultivo = cultivosPlantados.find(c => c.nombre === nombre);
+    if (!cultivo) return;
+
+    const cultivoData = cultivosDisponibles.find(c => c.name === cultivo.cultivo);
+    if (!cultivoData) return;
+
+    if (cultivo.estado !== "Maduro") {
+        alert("El cultivo aún no está maduro.");
+        return;
+    }
+
+    const tarjeta = document.querySelector(`.tarjeta[data-nombre="${nombre}"]`);
+
+    if (cultivoData.regrowsTo) {
+        const stage = cultivoData.stages.find(s => s.name === cultivoData.regrowsTo);
+        if (!stage) return;
+
+        cultivo.estado = cultivoData.regrowsTo;
+        cultivo.diasEnEtapa = 0;
+        cultivo.diasRequeridos = stage.days;
+        cultivo.puntosSolAcumulados = 0;
+        cultivo.puntosAguaAcumulados = 0;
+        cultivo.maxPuntosSol = stage.sunRange[1];
+        cultivo.maxPuntosAgua = stage.waterRange[1];
+
+        if (tarjeta) {
+            tarjeta.querySelector('.estado').textContent = cultivo.estado;
+            tarjeta.querySelector('.dias').textContent = cultivo.diasEnEtapa;
+            actualizarPuntosCultivo(nombre);
+        }
+    } else {
+        // Quitar el cultivo
+        if (tarjeta) tarjeta.remove();
+
+        cultivo.celdas.forEach(index => {
+            const celda = document.querySelector(`.grid div[data-index="${index}"]`);
+            if (celda) {
+                celda.classList.remove('bloqueado', 'border');
+                celda.style.backgroundColor = '';
+                celda.style.borderColor = '';
+                const img = celda.querySelector('img');
+                if (img) celda.removeChild(img);
+            }
+        });
+
+        cultivosPlantados = cultivosPlantados.filter(c => c.nombre !== nombre);
+    }
+
+    guardarCultivosEnLocalStorage();
 }
 
 // Función para obtener los puntos de sol y agua según el clima
