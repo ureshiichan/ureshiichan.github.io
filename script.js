@@ -265,7 +265,7 @@ function obtenerDiasRequeridos(nombreCultivo, estado) {
 }
 
 // Agregar tarjeta de cultivo en la sección correspondiente
-function agregarTarjetaCultivo(info) {
+function agregarTarjetaCultivo(info, fromStorage = false) {
     const tarjeta = document.createElement('div');
     tarjeta.classList.add('tarjeta');
     tarjeta.style.borderLeft = `10px solid ${info.color}`;
@@ -351,23 +351,25 @@ function agregarTarjetaCultivo(info) {
     document.getElementById('tarjetasCultivos').appendChild(tarjeta);
 
     // Guardamos la información del cultivo en una estructura global
-    cultivosPlantados.push({
-        nombre: info.nombre,
-        cultivo: info.cultivo,
-        estado: info.estado,
-        fecha: info.fecha,
-        color: info.color,
-        puntosSolDia: info.puntosSolDia,
-        puntosAguaDia: info.puntosAguaDia,
-        puntosSolAcumulados: info.puntosSolAcumulados,
-        puntosAguaAcumulados: info.puntosAguaAcumulados,
-        maxPuntosSol: info.maxPuntosSol,
-        maxPuntosAgua: info.maxPuntosAgua,
-        celdas: celdasSeleccionadas.map(celda => celda.dataset.index),
-        regado: info.regado,
-        diasEnEtapa: info.diasEnEtapa,
-        diasRequeridos: info.diasRequeridos
-    });
+    if (!fromStorage) {
+        cultivosPlantados.push({
+            nombre: info.nombre,
+            cultivo: info.cultivo,
+            estado: info.estado,
+            fecha: info.fecha,
+            color: info.color,
+            puntosSolDia: info.puntosSolDia,
+            puntosAguaDia: info.puntosAguaDia,
+            puntosSolAcumulados: info.puntosSolAcumulados,
+            puntosAguaAcumulados: info.puntosAguaAcumulados,
+            maxPuntosSol: info.maxPuntosSol,
+            maxPuntosAgua: info.maxPuntosAgua,
+            celdas: info.celdas ? info.celdas : celdasSeleccionadas.map(celda => celda.dataset.index),
+            regado: info.regado,
+            diasEnEtapa: info.diasEnEtapa,
+            diasRequeridos: info.diasRequeridos
+        });
+    }
 
     // Actualizar los puntos iniciales en la interfaz
     actualizarPuntosCultivo(info.nombre);
@@ -626,7 +628,12 @@ function cargarCultivosDeLocalStorage() {
     const diaGuardado = localStorage.getItem('diaActual');
 
     if (cultivosGuardados) {
-        cultivosPlantados = JSON.parse(cultivosGuardados);
+        const guardados = JSON.parse(cultivosGuardados);
+        const unicos = [];
+        guardados.forEach(c => {
+            if (!unicos.some(u => u.nombre === c.nombre)) unicos.push(c);
+        });
+        cultivosPlantados = unicos;
         cultivosPlantados.forEach(cultivo => {
             // Restaurar las celdas en la cuadrícula
             cultivo.celdas.forEach(index => {
@@ -645,8 +652,8 @@ function cargarCultivosDeLocalStorage() {
                 }
             });
 
-            // Agregar la tarjeta
-            agregarTarjetaCultivo(cultivo);
+            // Agregar la tarjeta sin volver a guardar
+            agregarTarjetaCultivo(cultivo, true);
         });
     }
 
