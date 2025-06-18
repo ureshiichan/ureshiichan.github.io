@@ -307,6 +307,10 @@ function agregarTarjetaCultivo(info) {
     `;
     wateringSelect.addEventListener('change', (e) => {
         info.regado = parseInt(e.target.value);
+        const cultivo = cultivosPlantados.find(c => c.nombre === info.nombre);
+        if (cultivo) {
+            cultivo.regado = info.regado;
+        }
         actualizarPuntosCultivo(info.nombre);
         guardarCultivosEnLocalStorage();
     });
